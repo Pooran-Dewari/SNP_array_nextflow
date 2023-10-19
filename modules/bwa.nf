@@ -9,12 +9,14 @@ process BWA {
   input:
   // your original input declaration didn't match the cardinality of your TRIM process output. 
   tuple val(sampleId), path(r1), path(r2)
+  val genome
+  // using 'val' here and not 'path' for $genome so that it can "be read unlimited times without consuming its contents"
 
   output:
-  path "*" // I would update this to be less promiscuous
+  path "*.sam" // I would update this to be less promiscuous
 
   script:
   """
-  bwa mem /exports/eddie/scratch/pdewari/hamour/genome/fEpiCoi_cnag1_curated_primary.no_mt.fa $r1 $r2 -t 2 > ${sampleId}.sam
+  bwa mem $genome $r1 $r2 -t 2 > ${sampleId}.sam
   """
 }
